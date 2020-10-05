@@ -4,7 +4,7 @@
 
 
 int main() {
-	using ORAM = PathORAM<6, 16>;
+	using ORAM = PathORAM<12, 16>;
 	ORAM oram;
 
 

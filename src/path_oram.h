@@ -170,7 +170,7 @@ private:
 		}
 	}
 
-	/*
+	/**
 	 * @param[in] leaf    Used to identify a path from the root node the the specified leaf node.
 	 * @param[in] height  The index of a node along the path described by the parameter 'leaf'.
 	 * 

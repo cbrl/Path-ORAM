@@ -40,11 +40,11 @@ public:
 		Write = 1
 	};
 
-	static constexpr uint64_t bucket_count  = (1ull << (HeightL + 1)) - 1;
-	static constexpr uint8_t  height_L      = HeightL;
-	static constexpr size_t   block_size_B  = BlockSizeB;
-	static constexpr uint8_t  bucket_size_Z = BucketSizeZ;
-	static constexpr uint64_t block_count_N = BucketSizeZ * bucket_count;
+	static constexpr size_t  bucket_count  = (1ull << (HeightL + 1)) - 1;
+	static constexpr uint8_t height_L      = HeightL;
+	static constexpr size_t  block_size_B  = BlockSizeB;
+	static constexpr uint8_t bucket_size_Z = BucketSizeZ;
+	static constexpr size_t  block_count_N = BucketSizeZ * bucket_count;
 
 
 	//--------------------------------------------------------------------------------

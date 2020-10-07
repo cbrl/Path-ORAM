@@ -131,7 +131,7 @@ private:
 
 	/**
 	 * @brief Read the valid blocks in a path into the stash
-	 * @param[in] leaf  Identifies a path from the root node to the specified leaf.
+	 * @param leaf  Identifies a path from the root node to the specified leaf.
 	 */
 	void readPath(size_t leaf) {
 		// Read each bucket on the path to the specified leaf into the stash
@@ -149,7 +149,7 @@ private:
 
 	/**
 	 * @brief Write the valid blocks in a path back to the storage and erase them from the stash.
-	 * @param[in] leaf  Identifies a path from the root node to the specified leaf.
+	 * @param leaf  Identifies a path from the root node to the specified leaf.
 	 */
 	void writePath(size_t leaf) {
 		for (int16_t l = HeightL; l >= 0; --l) {
@@ -179,8 +179,8 @@ private:
 	}
 
 	/**
-	 * @param[in] leaf    Identifies a path from the root node the the specified leaf node.
-	 * @param[in] height  The index of a node along the path described by the parameter 'leaf'.
+	 * @param leaf    Identifies a path from the root node the the specified leaf node.
+	 * @param height  The index of a node along the path described by the parameter 'leaf'.
 	 * 
 	 * @return A list of the IDs of blocks contained by the specified node
 	 */
@@ -204,8 +204,8 @@ private:
 	 * @brief  Given a path (from the root) to a leaf and the index of a node along that path, this
 	 *         function returns the index of that node in the bucket storage array.
 	 *
-	 * @param[in] leaf    Identifies a path from the root node to the specified leaf node. Range: [0, pow(2, HeightL)).
-	 * @param[in] height  The index of a node along the path described by the parameter 'leaf'. Range: [0, HeightL)
+	 * @param leaf    Identifies a path from the root node to the specified leaf node. Range: [0, pow(2, HeightL)).
+	 * @param height  The index of a node along the path described by the parameter 'leaf'. Range: [0, HeightL)
 	 *
 	 * @return The index in the bucket array of the node specified by 'leaf' and 'height'.
 	 */

@@ -95,10 +95,10 @@ public:
 			throw std::out_of_range("Block ID " + std::to_string(blk) + " exceeds ORAM size of " + std::to_string(block_count_N));
 		}
 
-		const size_t pos = position_map[blk];
+		const size_t leaf = position_map[blk];
 		position_map[blk] = randomPath();
 		
-		readPath(pos);
+		readPath(leaf);
 
 		// map::operator[] will create the element at blk if it doesn't exist. This
 		// will happen if the specified block doesn't exist yet.
@@ -116,7 +116,7 @@ public:
 			default: break;
 		}
 
-		writePath(pos);
+		writePath(leaf);
 	}
 
 private:
@@ -129,10 +129,14 @@ private:
 		return leaf_dist(mt);
 	}
 
-	void readPath(size_t pos) {
+	/**
+	 * @brief Read the valid blocks in a path into the stash
+	 * @param[in] leaf  Identifies a path from the root node to the specified leaf.
+	 */
+	void readPath(size_t leaf) {
 		// Read each bucket on the path to the specified leaf into the stash
 		for (uint8_t l = 0; l <= HeightL; ++l) {
-			const Bucket& bucket = buckets[getNodeOnPath(pos, l)];
+			const Bucket& bucket = buckets[getNodeOnPath(leaf, l)];
 
 			// Copy valid blocks to the stash
 			for (const IDBlock& block : bucket) {
@@ -143,12 +147,16 @@ private:
 		}
 	}
 
-	void writePath(size_t pos) {
+	/**
+	 * @brief Write the valid blocks in a path back to the storage and erase them from the stash.
+	 * @param[in] leaf  Identifies a path from the root node to the specified leaf.
+	 */
+	void writePath(size_t leaf) {
 		for (int16_t l = HeightL; l >= 0; --l) {
 			Bucket bucket;
 
-			const size_t node = getNodeOnPath(pos, static_cast<uint8_t>(l));
-			const std::vector<size_t> valid_blocks = getIntersectingBlocks(pos, static_cast<uint8_t>(l));
+			const size_t node = getNodeOnPath(leaf, static_cast<uint8_t>(l));
+			const std::vector<size_t> valid_blocks = getIntersectingBlocks(leaf, static_cast<uint8_t>(l));
 
 			// Copy the valid nodes to the bucket
 			for (size_t z = 0; z < std::min<size_t>(valid_blocks.size(), BucketSizeZ); ++z) {
@@ -171,7 +179,7 @@ private:
 	}
 
 	/**
-	 * @param[in] leaf    Used to identify a path from the root node the the specified leaf node.
+	 * @param[in] leaf    Identifies a path from the root node the the specified leaf node.
 	 * @param[in] height  The index of a node along the path described by the parameter 'leaf'.
 	 * 
 	 * @return A list of the IDs of blocks contained by the specified node
@@ -196,7 +204,7 @@ private:
 	 * @brief  Given a path (from the root) to a leaf and the index of a node along that path, this
 	 *         function returns the index of that node in the bucket storage array.
 	 *
-	 * @param[in] leaf    Used to identify a path from the root node to the specified leaf node. Range: [0, pow(2, HeightL)).
+	 * @param[in] leaf    Identifies a path from the root node to the specified leaf node. Range: [0, pow(2, HeightL)).
 	 * @param[in] height  The index of a node along the path described by the parameter 'leaf'. Range: [0, HeightL)
 	 *
 	 * @return The index in the bucket array of the node specified by 'leaf' and 'height'.

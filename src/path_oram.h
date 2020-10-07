@@ -10,9 +10,9 @@
 
 /**
  * @class PathORAM
- * 
+ *
  * @details See https://arxiv.org/abs/1202.5150
- * 
+ *
  * @tparam HeightL      The height of the binary tree. Represents parameter L in the Path ORAM paper.
  * @tparam BlockSizeB   The size of each block. Represents parameter B in the Path ORAM paper, but in
  *                      units of bytes instead of bits, since the smallest addressable size is 1 byte.
@@ -52,10 +52,11 @@ public:
 	//--------------------------------------------------------------------------------
 	PathORAM() :
 		buckets(bucket_count),
+		position_map(block_count_N),
 		rd(),
 		mt(rd()) {
-		for (size_t i = 0; i < block_count_N; ++i) {
-			position_map[i] = randomPath();
+		for (auto& p : position_map) {
+			p = randomPath();
 		}
 	}
 
@@ -185,7 +186,7 @@ private:
 	 * @return A list of the IDs of blocks contained by the specified node
 	 */
 	[[nodiscard]]
-	std::vector<size_t> getIntersectingBlocks(size_t leaf, uint8_t height) {
+	std::vector<size_t> getIntersectingBlocks(size_t leaf, uint8_t height) const {
 		const size_t node = getNodeOnPath(leaf, height);
 
 		std::vector<size_t> valid_blocks;
@@ -210,7 +211,7 @@ private:
 	 * @return The index in the bucket array of the node specified by 'leaf' and 'height'.
 	 */
 	[[nodiscard]]
-	size_t getNodeOnPath(size_t leaf, uint8_t height) {
+	size_t getNodeOnPath(size_t leaf, uint8_t height) const noexcept {
 		leaf += bucket_count / 2;
 
 		for (int16_t l = (HeightL - 1); l >= static_cast<int16_t>(height); --l) {
@@ -232,8 +233,11 @@ private:
 	 */
 	std::vector<Bucket> buckets;
 
-	/// The position map. Stores the branch that each node lies on in the ORAM storage.
-	std::array<size_t, block_count_N> position_map;
+	/**
+	 * @brief Stores the branch that each node lies on in the ORAM storage.
+	 * @details Like the bucket vector, this will also have a constant size.
+	 */
+	std::vector<size_t> position_map;
 
 	/// The ORAM stash
 	std::map<size_t, Block> stash;

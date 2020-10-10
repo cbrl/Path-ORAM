@@ -245,5 +245,5 @@ private:
 	// Used for random path generation
 	std::random_device rd;
 	std::mt19937 mt;
-	std::uniform_int_distribution<size_t> leaf_dist{0, bucket_count/2}; //tree with height N will have floor((2^(N+1)-1) / 2) leaves
+	std::uniform_int_distribution<size_t> leaf_dist{0, ((1ull << HeightL) - 1)}; //tree with height N will have 2^N leaves
 };
